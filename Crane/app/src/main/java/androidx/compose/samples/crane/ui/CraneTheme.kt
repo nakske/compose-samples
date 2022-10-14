@@ -30,13 +30,16 @@ private val crane_white = Color.White
 private val crane_purple_700 = Color(0xFF720D5D)
 private val crane_purple_800 = Color(0xFF5D1049)
 private val crane_purple_900 = Color(0xFF4E0D3A)
+private val tripenhancer_blue_700 = Color(0xFF00BCD4)
+private val tripenhancer_blue_800 = Color(0xFF2196F3)
+private val tripenhancer_blue_900 = Color(0xFF3F51B5)
 
 val craneColors = lightColors(
-    primary = crane_purple_800,
+    primary = tripenhancer_blue_800,
     secondary = crane_red,
-    surface = crane_purple_900,
+    surface = tripenhancer_blue_900,
     onSurface = crane_white,
-    primaryVariant = crane_purple_700
+    primaryVariant = tripenhancer_blue_700
 )
 
 val BottomSheetShape = RoundedCornerShape(

@@ -29,6 +29,11 @@ class DestinationsLocalDataSource @Inject constructor() {
 
     val craneRestaurants = listOf(
         ExploreModel(
+            city = KINROOI,
+            description = "11 Restaurants",
+            imageUrl = "https://images.unsplash.com/photo-1562625964-ffe9b2f617fc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=250&q=$DEFAULT_IMAGE_WIDTH"
+        ),
+        ExploreModel(
             city = NAPLES,
             description = "1286 Restaurants",
             imageUrl = "https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?ixlib=rb-1.2.1&auto=format&fit=crop&w=$DEFAULT_IMAGE_WIDTH"
@@ -67,6 +72,11 @@ class DestinationsLocalDataSource @Inject constructor() {
 
     val craneHotels = listOf(
         ExploreModel(
+            city = KINROOI,
+            description = "111 Available Properties",
+            imageUrl = "https://images.unsplash.com/photo-1562625964-ffe9b2f617fc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=250&q=$DEFAULT_IMAGE_WIDTH"
+        ),
+        ExploreModel(
             city = MALDIVAS,
             description = "1286 Available Properties",
             imageUrl = "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=$DEFAULT_IMAGE_WIDTH"
@@ -104,6 +114,11 @@ class DestinationsLocalDataSource @Inject constructor() {
     )
 
     val craneDestinations = listOf(
+        ExploreModel(
+            city = KINROOI,
+            description = "1 min",
+            imageUrl = "https://images.unsplash.com/photo-1562625964-ffe9b2f617fc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=250&q=$DEFAULT_IMAGE_WIDTH"
+        ),
         ExploreModel(
             city = KHUMBUVALLEY,
             description = "Nonstop - 5h 16m+",

@@ -38,7 +38,8 @@ private val screens = listOf(
     R.string.screen_title_my_trips,
     R.string.screen_title_saved_trips,
     R.string.screen_title_price_alerts,
-    R.string.screen_title_my_account
+    R.string.screen_title_my_account,
+    R.string.screen_title_where_am_i
 )
 
 @Composable
@@ -49,7 +50,7 @@ fun CraneDrawer(modifier: Modifier = Modifier) {
             .padding(start = 24.dp, top = 48.dp)
     ) {
         Image(
-            painter = painterResource(R.drawable.ic_crane_drawer),
+            painter = painterResource(R.drawable.bike_fast),
             contentDescription = stringResource(R.string.cd_drawer)
         )
         for (screenTitleResource in screens) {

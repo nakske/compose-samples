@@ -16,6 +16,13 @@
 
 package androidx.compose.samples.crane.data
 
+val KINROOI = City(
+    name = "Kinrooi",
+    country = "Belgium",
+    latitude = "51.145529",
+    longitude = "5.740863"
+)
+
 val MADRID = City(
     name = "Madrid",
     country = "Spain",

@@ -64,7 +64,7 @@ fun CraneTabBar(
             )
             Spacer(Modifier.width(8.dp))
             Image(
-                painter = painterResource(id = R.drawable.ic_crane_logo),
+                painter = painterResource(id = R.drawable.bike_fast),
                 contentDescription = null
             )
         }

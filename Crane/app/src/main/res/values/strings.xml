@@ -29,6 +29,7 @@
     <string name="screen_title_saved_trips">Saved Trips</string>
     <string name="screen_title_price_alerts">Price Alerts</string>
     <string name="screen_title_my_account">My Account</string>
+    <string name="screen_title_where_am_i">Where am I?</string>
     <string name="calendar_select_dates_title">Select Dates</string>
     <string name="explore_flights_by_destination">Explore Flights by Destination</string>
     <string name="explore_properties_by_destination">Explore Properties by Destination</string>
