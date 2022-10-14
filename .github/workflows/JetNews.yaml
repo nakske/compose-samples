@@ -33,7 +33,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
@@ -46,7 +46,7 @@ jobs:
       - name: Generate cache key
         run: ./scripts/checksum.sh $SAMPLE_PATH checksum.txt
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: |
             ~/.gradle/caches/modules-*
@@ -65,7 +65,7 @@ jobs:
 
       - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: test-reports
+          name: test-reports-jetnews-${{ matrix.api-level }}
           path: ${{ env.SAMPLE_PATH }}/app/build/reports/androidTests

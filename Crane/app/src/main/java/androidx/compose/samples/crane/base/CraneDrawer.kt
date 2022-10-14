@@ -55,7 +55,10 @@ fun CraneDrawer(modifier: Modifier = Modifier) {
         )
         for (screenTitleResource in screens) {
             Spacer(Modifier.height(24.dp))
-            Text(text = stringResource(id = screenTitleResource), style = MaterialTheme.typography.h4)
+            Text(
+                text = stringResource(id = screenTitleResource),
+                style = MaterialTheme.typography.h4
+            )
         }
     }
 }

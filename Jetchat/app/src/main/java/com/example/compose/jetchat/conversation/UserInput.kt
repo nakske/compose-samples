@@ -483,7 +483,8 @@ fun ExtendedSelectorInnerButton(
     modifier: Modifier = Modifier
 ) {
     val colors = ButtonDefaults.buttonColors(
-        containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
+        containerColor = if (selected) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
+        else Color.Transparent,
         disabledContainerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onSurface,
         disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.74f)
@@ -493,7 +494,6 @@ fun ExtendedSelectorInnerButton(
         modifier = modifier
             .padding(8.dp)
             .height(36.dp),
-        enabled = selected,
         colors = colors,
         contentPadding = PaddingValues(0.dp)
     ) {
