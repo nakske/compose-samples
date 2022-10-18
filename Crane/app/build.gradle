@@ -107,6 +107,11 @@ dependencies {
     implementation Libs.Kotlin.Coroutines.android
     implementation Libs.GoogleMaps.maps
     implementation Libs.GoogleMaps.composeMaps
+    implementation("com.google.maps.android:maps-compose:1.0.0")
+    implementation("com.google.android.gms:play-services-maps:18.0.2")
+    implementation 'com.google.android.libraries.maps:maps:3.1.0-beta'
+    implementation("com.google.maps.android:maps-v3-ktx:2.2.0")
+    implementation("androidx.fragment:fragment-ktx:1.5.3")
     constraints {
         // Volley is a transitive dependency of maps
         implementation(Libs.Volley.volley) {

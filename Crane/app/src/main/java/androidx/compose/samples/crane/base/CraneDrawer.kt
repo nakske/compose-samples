@@ -50,7 +50,7 @@ fun CraneDrawer(modifier: Modifier = Modifier) {
             .padding(start = 24.dp, top = 48.dp)
     ) {
         Image(
-            painter = painterResource(R.drawable.bike_fast),
+            painter = painterResource(R.drawable.ic_bike_fast),
             contentDescription = stringResource(R.string.cd_drawer)
         )
         for (screenTitleResource in screens) {

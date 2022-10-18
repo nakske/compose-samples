@@ -192,7 +192,7 @@ private fun ExploreImage(item: ExploreModel) {
 
         if (painter.state is Loading) {
             Image(
-                painter = painterResource(id = R.drawable.bike_fast),
+                painter = painterResource(id = R.drawable.ic_bike_fast),
                 contentDescription = null,
                 modifier = Modifier
                     .size(36.dp)

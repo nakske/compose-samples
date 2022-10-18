@@ -41,6 +41,6 @@ fun LandingScreen(modifier: Modifier = Modifier, onTimeout: () -> Unit) {
             delay(SplashWaitTime)
             currentOnTimeout()
         }
-        Image(painterResource(id = R.drawable.bike_fast), contentDescription = null)
+        Image(painterResource(id = R.drawable.ic_bike_fast), contentDescription = null)
     }
 }

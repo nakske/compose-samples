@@ -64,7 +64,7 @@ fun CraneTabBar(
             )
             Spacer(Modifier.width(8.dp))
             Image(
-                painter = painterResource(id = R.drawable.bike_fast),
+                painter = painterResource(id = R.drawable.ic_bike_fast),
                 contentDescription = null
             )
         }
@@ -115,7 +115,7 @@ fun CraneTabs(
                 Text(
                     modifier = textModifier,
                     text = title.uppercase(
-                        ConfigurationCompat.getLocales(LocalConfiguration.current)[0]
+                        ConfigurationCompat.getLocales(LocalConfiguration.current)[0]!!
                     )
                 )
             }

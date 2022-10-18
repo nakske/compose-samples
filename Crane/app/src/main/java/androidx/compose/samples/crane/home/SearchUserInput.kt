@@ -96,7 +96,7 @@ fun PeopleUserInput(
 
 @Composable
 fun FromDestination() {
-    CraneUserInput(text = "Seoul, South Korea", vectorImageId = R.drawable.ic_location)
+    CraneUserInput(text = "Kinrooi, Belgium", vectorImageId = R.drawable.ic_location)
 }
 
 @Composable

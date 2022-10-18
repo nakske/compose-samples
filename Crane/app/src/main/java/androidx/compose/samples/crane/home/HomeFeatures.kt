@@ -17,6 +17,7 @@
 package androidx.compose.samples.crane.home
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridScope
@@ -28,6 +29,10 @@ import androidx.compose.samples.crane.base.SimpleUserInput
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
 fun FlySearchContent(
@@ -119,6 +124,42 @@ fun EatSearchContent(
             SimpleUserInput(caption = stringResource(R.string.input_select_location), vectorImageId = R.drawable.ic_restaurant)
         }
     }
+}
+
+@Composable
+fun HereSearchContent(
+    widthSize: WindowWidthSizeClass,
+    datesSelected: String,
+    searchUpdates: HereSearchContentUpdates
+) {
+
+    val columns = when (widthSize) {
+        WindowWidthSizeClass.Compact -> 1
+        WindowWidthSizeClass.Medium -> 2
+        WindowWidthSizeClass.Expanded -> 4
+        else -> 1
+    }
+
+    CraneSearch(
+        columns,
+        content = {
+            item {
+                PeopleUserInput(
+                    titleSuffix = ", Economy",
+                    onPeopleChanged = searchUpdates.onPeopleChanged
+                )
+            }
+            item {
+                FromDestination()
+            }
+            item {
+                ToDestinationUserInput(onToDestinationChanged = searchUpdates.onToDestinationChanged)
+            }
+            item {
+                DatesUserInput(datesSelected, onDateSelectionClicked = searchUpdates.onDateSelectionClicked)
+            }
+        }
+    )
 }
 
 @Composable

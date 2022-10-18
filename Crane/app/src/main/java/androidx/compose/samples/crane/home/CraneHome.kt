@@ -16,6 +16,8 @@
 
 package androidx.compose.samples.crane.home
 
+import android.location.Location
+import android.os.Bundle
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -27,10 +29,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.with
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.BackdropScaffold
 import androidx.compose.material.BackdropValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -38,13 +38,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberBackdropScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.samples.crane.R
 import androidx.compose.samples.crane.base.CraneDrawer
 import androidx.compose.samples.crane.base.CraneTabBar
@@ -54,14 +49,29 @@ import androidx.compose.samples.crane.data.ExploreModel
 import androidx.compose.samples.crane.ui.BottomSheetShape
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.libraries.maps.CameraUpdateFactory
+import com.google.android.libraries.maps.MapView
+import com.google.android.libraries.maps.model.MarkerOptions
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.ktx.awaitMap
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 typealias OnExploreItemClicked = (ExploreModel) -> Unit
 
 enum class CraneScreen {
-    Fly, Sleep, Eat
+   /* Fly,*/ Sleep, Eat, Here
 }
 
 @Composable
@@ -109,7 +119,7 @@ fun CraneHomeContent(
     val suggestedDestinations by viewModel.suggestedDestinations.observeAsState()
 
     val onPeopleChanged: (Int) -> Unit = { viewModel.updatePeople(it) }
-    var tabSelected by remember { mutableStateOf(CraneScreen.Fly) }
+    var tabSelected by remember { mutableStateOf(CraneScreen.Here) }
 
     BackdropScaffold(
         modifier = modifier,
@@ -153,7 +163,7 @@ fun CraneHomeContent(
                 }
             ) { targetState ->
                 when (targetState) {
-                    CraneScreen.Fly -> {
+                    /*CraneScreen.Fly -> {
                         suggestedDestinations?.let { destinations ->
                             ExploreSection(
                                 widthSize = widthSize,
@@ -162,7 +172,7 @@ fun CraneHomeContent(
                                 onItemClicked = onExploreItemClicked
                             )
                         }
-                    }
+                    }*/
                     CraneScreen.Sleep -> {
                         ExploreSection(
                             widthSize = widthSize,
@@ -178,6 +188,9 @@ fun CraneHomeContent(
                             exploreList = viewModel.restaurants,
                             onItemClicked = onExploreItemClicked
                         )
+                    }
+                    CraneScreen.Here -> {
+                        GetCurrentLocation()
                     }
                 }
             }
@@ -240,7 +253,7 @@ private fun SearchContent(
         },
     ) { targetState ->
         when (targetState) {
-            CraneScreen.Fly -> FlySearchContent(
+           /* CraneScreen.Fly -> FlySearchContent(
                 widthSize = widthSize,
                 datesSelected = selectedDates,
                 searchUpdates = FlySearchContentUpdates(
@@ -249,7 +262,7 @@ private fun SearchContent(
                     onDateSelectionClicked = onDateSelectionClicked,
                     onExploreItemClicked = onExploreItemClicked
                 )
-            )
+            )*/
             CraneScreen.Sleep -> SleepSearchContent(
                 widthSize = widthSize,
                 datesSelected = selectedDates,
@@ -264,6 +277,16 @@ private fun SearchContent(
                 datesSelected = selectedDates,
                 eatUpdates = EatSearchContentUpdates(
                     onPeopleChanged = onPeopleChanged,
+                    onDateSelectionClicked = onDateSelectionClicked,
+                    onExploreItemClicked = onExploreItemClicked
+                )
+            )
+            CraneScreen.Here -> HereSearchContent(
+                widthSize = widthSize,
+                datesSelected = selectedDates,
+                searchUpdates = HereSearchContentUpdates(
+                    onPeopleChanged = onPeopleChanged,
+                    onToDestinationChanged = { viewModel.toDestinationChanged(it) },
                     onDateSelectionClicked = onDateSelectionClicked,
                     onExploreItemClicked = onExploreItemClicked
                 )
@@ -290,3 +313,86 @@ data class EatSearchContentUpdates(
     val onDateSelectionClicked: () -> Unit,
     val onExploreItemClicked: OnExploreItemClicked
 )
+
+data class HereSearchContentUpdates(
+    val onPeopleChanged: (Int) -> Unit,
+    val onToDestinationChanged: (String) -> Unit,
+    val onDateSelectionClicked: () -> Unit,
+    val onExploreItemClicked: OnExploreItemClicked
+)
+
+
+
+private  var locations: Location?=null
+private  lateinit var  mapView: MapView
+
+@Composable
+fun GetCurrentLocation() {
+    mapView = rememberMapViewWithLifeCycle()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
+        AndroidView(
+            {mapView}
+        ) { mapView ->
+            CoroutineScope(Dispatchers.Main).launch {
+                val map = mapView.awaitMap()
+                map.uiSettings.isZoomControlsEnabled = true
+                if (locations !=null){
+                    val destination = com.google.android.libraries.maps.model.LatLng(locations!!.latitude, locations!!.longitude)
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(destination, 6f))
+                    val markerOptions =  MarkerOptions()
+                        .title("Your location")
+                        .position(destination)
+                    map.addMarker(markerOptions)
+                } else {
+                    val destination = com.google.android.libraries.maps.model.LatLng(51.145529, 5.740863)
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(destination, 6f))
+                    val markerOptions =  MarkerOptions()
+                        .title("Static location")
+                        .position(destination)
+                    map.addMarker(markerOptions)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun rememberMapViewWithLifeCycle(): MapView {
+    val context = LocalContext.current
+    val mapView = remember {
+        MapView(context).apply {
+            id = R.id.map_frame
+        }
+    }
+    val lifeCycleObserver = rememberMapLifecycleObserver(mapView)
+    val lifeCycle = LocalLifecycleOwner.current.lifecycle
+    DisposableEffect(lifeCycle) {
+        lifeCycle.addObserver(lifeCycleObserver)
+        onDispose {
+            lifeCycle.removeObserver(lifeCycleObserver)
+        }
+    }
+
+    return mapView
+}
+
+@Composable
+fun rememberMapLifecycleObserver(mapView: MapView): LifecycleEventObserver =
+    remember(mapView) {
+        LifecycleEventObserver { _, event ->
+            when(event) {
+                Lifecycle.Event.ON_CREATE -> mapView.onCreate(Bundle())
+                Lifecycle.Event.ON_START -> mapView.onStart()
+                Lifecycle.Event.ON_RESUME -> mapView.onResume()
+                Lifecycle.Event.ON_PAUSE -> mapView.onPause()
+                Lifecycle.Event.ON_STOP -> mapView.onStop()
+                Lifecycle.Event.ON_DESTROY -> mapView.onDestroy()
+                else -> throw IllegalStateException()
+            }
+        }
+    }

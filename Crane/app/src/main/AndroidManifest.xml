@@ -19,6 +19,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="androidx.compose.samples.crane">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <!--
         Android 11 package visibility changes require that apps specify which
